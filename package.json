@@ -1,0 +1,46 @@
+{
+  "name": "gulp-through",
+  "description": "Gulp stream transform factory",
+  "version": "0.3.0",
+  "main": "src/index.js",
+  "homepage": "https://github.com/mgcrea/gulp-through",
+  "author": {
+    "name": "Olivier Louvignes",
+    "email": "olivier@mg-crea.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mgcrea/gulp-through.git"
+  },
+  "keywords": [
+    "gulp",
+    "angular"
+  ],
+  "bugs": {
+    "url": "https://github.com/mgcrea/gulp-through/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/mgcrea/gulp-through/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "gulp-util": "^3.0.0",
+    "lodash.assign": "^2.4.1",
+    "through2": "^0.5.1",
+    "xtend": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "sinon": "*"
+  }
+}
