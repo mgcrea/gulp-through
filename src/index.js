@@ -25,7 +25,10 @@ module.exports = function(name, callback, defaults) {
       }
 
       try {
-        callback.call(this, file, config);
+        callback.call(this, file, config, function(err) {
+          // Gracefully recover from an error
+          return gutil.log(util.format('Encountered the following error while processing \'%s\' through %s\n%s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta('jade'), chalk.red(err)));
+        });
       } catch(err) {
         return error(err);
       }
