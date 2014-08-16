@@ -32,11 +32,11 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
+    "bluebird": "^2.3.0",
     "chalk": "^0.5.1",
     "gulp-util": "^3.0.0",
-    "bluebird": "^2.2.2",
-    "through2": "^0.5.1",
-    "xtend": "^3.0.0"
+    "through2": "^0.6.1",
+    "xtend": "^4.0.0"
   },
   "devDependencies": {
     "mocha": "*",
