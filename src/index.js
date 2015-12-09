@@ -6,23 +6,23 @@ var chalk = require('chalk');
 var gutil = require('gulp-util');
 var through = require('through2');
 var Promise = require('bluebird');
-var extend = require('xtend');
 
-module.exports = function(name, callback, defaults) {
+module.exports = function(name, callback, config) {
 
-  return function(options) {
+  return function() {
 
-    var config = extend(defaults, options);
+    var args = [].slice.call(arguments);
+    if(!args.length || typeof args[args.length - 1] !== 'object') args.push({});
 
     function transform(file, encoding, next) {
-
-      var emit = this.emit;
+      /* jshint validthis:true */
 
       if(file.isNull()) {
         return next(null, file); // pass along
       }
 
-      Promise.resolve(callback.call(this, file, config))
+      Promise.resolve(callback.apply(this, [file].concat(args)))
+      .bind(this)
       .then(function() {
         if(config.debug) {
           gutil.log(util.format('Processed \'%s\' through %s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name)));
@@ -31,15 +31,16 @@ module.exports = function(name, callback, defaults) {
       })
       .catch(function(err) {
         if(config.safe) {
-          return gutil.log(util.format('Encountered the following error while processing \'%s\' through %s\n%s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta('jade'), chalk.red(err)));
+          gutil.log(util.format('Encountered the following error while processing \'%s\' through %s\n%s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name), chalk.red(err.stack || err)));
+          return;
         }
-        emit('error', new gutil.PluginError(name, err));
+        this.emit('error', new gutil.PluginError(name, err));
       });
 
     }
 
     return through.obj(transform);
 
-  }
+  };
 
 };
