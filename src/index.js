@@ -9,6 +9,10 @@ var Promise = require('bluebird');
 
 module.exports = function(name, callback, config) {
 
+  if (!config) {
+    config = {};
+  }
+
   return function() {
 
     var args = [].slice.call(arguments);
@@ -21,8 +25,10 @@ module.exports = function(name, callback, config) {
         return next(null, file); // pass along
       }
 
-      Promise.resolve(callback.apply(this, [file].concat(args)))
-      .bind(this)
+      Promise.bind(this)
+      .then(function() {
+        return callback.apply(this, [file].concat(args));
+      })
       .then(function() {
         if(config.debug) {
           gutil.log(util.format('Processed \'%s\' through %s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name)));
