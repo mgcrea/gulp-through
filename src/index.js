@@ -3,7 +3,8 @@
 var util = require('util');
 var path = require('path');
 var chalk = require('chalk');
-var gutil = require('gulp-util');
+var PluginError = require('plugin-error');
+var log = require('fancy-log');
 var through = require('through2');
 var Promise = require('bluebird');
 
@@ -31,16 +32,16 @@ module.exports = function(name, callback, config) {
       })
       .then(function() {
         if(config.debug) {
-          gutil.log(util.format('Processed \'%s\' through %s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name)));
+          log(util.format('Processed \'%s\' through %s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name)));
         }
         next(null, file);
       })
       .catch(function(err) {
         if(config.safe) {
-          gutil.log(util.format('Encountered the following error while processing \'%s\' through %s\n%s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name), chalk.red(err.stack || err)));
+          log(util.format('Encountered the following error while processing \'%s\' through %s\n%s', chalk.cyan(path.relative(process.cwd(), file.path)), chalk.magenta(name), chalk.red(err.stack || err)));
           return;
         }
-        this.emit('error', new gutil.PluginError(name, err));
+        this.emit('error', new PluginError(name, err));
       });
 
     }
